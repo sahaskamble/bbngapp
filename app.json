@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "bbnqapp",
-    "slug": "bbngapp",
+    "slug": "bbnqapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.yashmhatre625.bbngapp"
+      "package": "com.appniche_technologies.bbngapp"
     },
     "web": {
       "bundler": "metro",
@@ -38,9 +38,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "afa07445-4689-42cb-98b1-43dbc043fe50"
+        "projectId": "f02f6559-f217-4b55-8e62-74d7faf968f0"
       }
     },
-    "owner": "yashmhatre625"
+    "owner": "shadosama"
   }
 }

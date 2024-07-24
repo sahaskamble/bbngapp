@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { View, Text,TextInput, StyleSheet, TouchableOpacity, Image, ScrollView, Animated, Easing, Linking } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView, Animated, Easing, Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { EvilIcons } from '@expo/vector-icons';
-import { useColorScheme } from '@/hooks/useColorScheme';
-// import "../global.css";
 
 const HomePage: React.FC = () => {
   const router = useRouter();
@@ -12,20 +10,17 @@ const HomePage: React.FC = () => {
   const [showMessagesDropdown, setShowMessagesDropdown] = useState(false);
   const [showAuthDropdown, setShowAuthDropdown] = useState(false);
 
-  const colorScheme = useColorScheme();
   const sidebarAnim = useRef(new Animated.Value(-1000)).current;
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar),
-    Animated.timing(sidebarAnim, {
-      toValue: showSidebar ? -1000 : 0,
-      duration: 300,
-      easing: Easing.ease,
-      useNativeDriver: false,
-    }).start();
+      Animated.timing(sidebarAnim, {
+        toValue: showSidebar ? -1000 : 0,
+        duration: 300,
+        easing: Easing.ease,
+        useNativeDriver: false,
+      }).start();
   };
-
-  const handleNavmenuPress = () => {};
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -39,135 +34,132 @@ const HomePage: React.FC = () => {
     setShowAuthDropdown(!showAuthDropdown);
   };
 
-  const openExternalLink = (url: string) => {
-    Linking.openURL(url).catch((err) => console.error('Error opening external link:', err));
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={toggleSidebar} style={styles.iconButton}>
-          <EvilIcons name="navicon" size={40} color="#ffffff" />
+          <EvilIcons name="navicon" size={50} color="#ffffff" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => openExternalLink('https://github.com/itzblacckk')}>
+        <TouchableOpacity onPress={() =>{ router.navigate('(tabs)/profile') } }>
           <Image
             style={styles.profileImage}
-            source={require('../../assets/images/profile.jpg')} 
+            source={require('../../assets/images/profile.jpg')}
           />
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container2}>
-      <View style={styles.header2}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.menuButton}>
-            <Text style={styles.menuButtonText}>☰</Text>
-          </TouchableOpacity>
-          <View style={styles.picker}>
-            <Text style={styles.pickerText}>Category Search</Text>
+        <View style={styles.header2}>
+          <View style={styles.headerLeft}>
+            <TouchableOpacity style={styles.menuButton}>
+              <Text style={styles.menuButtonText}>☰</Text>
+            </TouchableOpacity>
+            <View style={styles.picker}>
+              <Text style={styles.pickerText}>Category Search</Text>
+            </View>
+            <View style={styles.picker}>
+              <Text style={styles.pickerText}>Chapter Search</Text>
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Search by Keywords"
+            />
           </View>
-          <View style={styles.picker}>
-            <Text style={styles.pickerText}>Chapter Search</Text>
+          <View style={styles.headerRight}>
+            <TouchableOpacity style={styles.notificationButton}>
+              <Text style={styles.notificationBadge}>23</Text>
+              <Text style={styles.notificationIcon}>🔔</Text>
+            </TouchableOpacity>
+            <View style={styles.profileCircle}>
+              <Text style={styles.profileInitials}>SS</Text>
+            </View>
           </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Search by Keywords"
+        </View>
+
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={require('../../assets/images/2024.jpg')}
           />
         </View>
-        <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.notificationButton}>
-            <Text style={styles.notificationBadge}>23</Text>
-            <Text style={styles.notificationIcon}>🔔</Text>
-          </TouchableOpacity>
-          <View style={styles.profileCircle}>
-            <Text style={styles.profileInitials}>SS</Text>
+
+        <Text style={styles.welcomeText}>Welcome Savani Sangwai !!</Text>
+
+        <View style={styles.grid}>
+          <View style={[styles.card, styles.greenCard]}>
+            <Text style={styles.cardValue}>₹ 4,46,39,449</Text>
+            <Text style={styles.cardLabel}>BNI Business Generated</Text>
+          </View>
+          <View style={[styles.card, styles.orangeCard]}>
+            <Text style={styles.cardValue}>431</Text>
+            <Text style={styles.cardLabel}>BNI References Shared</Text>
+          </View>
+          <View style={[styles.card, styles.orangeCard]}>
+            <Text style={styles.cardValue}>131</Text>
+            <Text style={styles.cardLabel}>BNI Total Visitors</Text>
+          </View>
+          <View style={[styles.card, styles.orangeCard]}>
+            <Text style={styles.cardValue}>372</Text>
+            <Text style={styles.cardLabel}>BNI Total One 2 One</Text>
+          </View>
+          <View style={styles.card}>
+            <Text style={styles.cardValue}>0</Text>
+            <Text style={styles.cardLabel}>References Given</Text>
+            <Text style={styles.cardLabel}>Self</Text>
+          </View>
+          <View style={styles.card}>
+            <Text style={styles.cardValue}>₹ 17,556</Text>
+            <Text style={styles.cardLabel}>Business Given</Text>
+            <Text style={styles.cardLabel}>Self</Text>
+          </View>
+          <View style={[styles.card, styles.greenCard]}>
+            <Text style={styles.cardValue}>₹ 1,92,12,066</Text>
+            <Text style={styles.cardLabel}>Kalyan Business Generated</Text>
+          </View>
+          <View style={[styles.card, styles.orangeCard]}>
+            <Text style={styles.cardValue}>118</Text>
+            <Text style={styles.cardLabel}>Kalyan References Shared</Text>
+          </View>
+          <View style={styles.card}>
+            <Text style={styles.cardValue}>16</Text>
+            <Text style={styles.cardLabel}>References Received</Text>
+            <Text style={styles.cardLabel}>Self</Text>
+          </View>
+          <View style={styles.card}>
+            <Text style={styles.cardValue}>₹ 0</Text>
+            <Text style={styles.cardLabel}>Business Received</Text>
+            <Text style={styles.cardLabel}>Self</Text>
+          </View>
+          <View style={[styles.card, styles.orangeCard]}>
+            <Text style={styles.cardValue}>0</Text>
+            <Text style={styles.cardLabel}>Kalyan Visitors</Text>
+          </View>
+          <View style={[styles.card, styles.orangeCard]}>
+            <Text style={styles.cardValue}>101</Text>
+            <Text style={styles.cardLabel}>Kalyan One 2 One</Text>
           </View>
         </View>
-      </View>
 
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/images/2024.jpg')} 
-        />
-      </View>
+        <View style={styles.grid}>
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Upcoming Events</Text>
+          </View>
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Upcoming Meetings</Text>
+          </View>
+        </View>
 
-      <Text style={styles.welcomeText}>Welcome Savani Sangwai !!</Text>
-
-      <View style={styles.grid}>
-        <View style={[styles.card, styles.greenCard]}>
-          <Text style={styles.cardValue}>₹ 4,46,39,449</Text>
-          <Text style={styles.cardLabel}>BNI Business Generated</Text>
-        </View>
-        <View style={[styles.card, styles.orangeCard]}>
-          <Text style={styles.cardValue}>431</Text>
-          <Text style={styles.cardLabel}>BNI References Shared</Text>
-        </View>
-        <View style={[styles.card, styles.orangeCard]}>
-          <Text style={styles.cardValue}>131</Text>
-          <Text style={styles.cardLabel}>BNI Total Visitors</Text>
-        </View>
-        <View style={[styles.card, styles.orangeCard]}>
-          <Text style={styles.cardValue}>372</Text>
-          <Text style={styles.cardLabel}>BNI Total One 2 One</Text>
-        </View>
         <View style={styles.card}>
-          <Text style={styles.cardValue}>0</Text>
-          <Text style={styles.cardLabel}>References Given</Text>
-          <Text style={styles.cardLabel}>Self</Text>
+          <Text style={styles.sectionTitle}>Messages</Text>
         </View>
-        <View style={styles.card}>
-          <Text style={styles.cardValue}>₹ 17,556</Text>
-          <Text style={styles.cardLabel}>Business Given</Text>
-          <Text style={styles.cardLabel}>Self</Text>
-        </View>
-        <View style={[styles.card, styles.greenCard]}>
-          <Text style={styles.cardValue}>₹ 1,92,12,066</Text>
-          <Text style={styles.cardLabel}>Kalyan Business Generated</Text>
-        </View>
-        <View style={[styles.card, styles.orangeCard]}>
-          <Text style={styles.cardValue}>118</Text>
-          <Text style={styles.cardLabel}>Kalyan References Shared</Text>
-        </View>
-        <View style={styles.card}>
-          <Text style={styles.cardValue}>16</Text>
-          <Text style={styles.cardLabel}>References Received</Text>
-          <Text style={styles.cardLabel}>Self</Text>
-        </View>
-        <View style={styles.card}>
-          <Text style={styles.cardValue}>₹ 0</Text>
-          <Text style={styles.cardLabel}>Business Received</Text>
-          <Text style={styles.cardLabel}>Self</Text>
-        </View>
-        <View style={[styles.card, styles.orangeCard]}>
-          <Text style={styles.cardValue}>0</Text>
-          <Text style={styles.cardLabel}>Kalyan Visitors</Text>
-        </View>
-        <View style={[styles.card, styles.orangeCard]}>
-          <Text style={styles.cardValue}>101</Text>
-          <Text style={styles.cardLabel}>Kalyan One 2 One</Text>
-        </View>
-      </View>
-
-      <View style={styles.grid}>
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Upcoming Events</Text>
-        </View>
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Upcoming Meetings</Text>
-        </View>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Messages</Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
       <Animated.View style={[styles.sidebar, { left: sidebarAnim, backgroundColor: '#5bc0de' }]}>
         <TouchableOpacity onPress={toggleSidebar} style={styles.closeButton}>
           <EvilIcons name="close" size={40} color="#ffffff" />
         </TouchableOpacity>
         <Image
           style={styles.sidebarImage}
-          source={require('../../assets/images/logo.png')} 
+          source={require('../../assets/images/logo.png')}
         />
         <ScrollView>
           <TouchableOpacity onPress={() => router.navigate('(tabs)/home')}>
@@ -182,7 +174,7 @@ const HomePage: React.FC = () => {
               <TouchableOpacity onPress={() => router.navigate('/screens/givenewreference')}>
                 <Text style={styles.dropdownItem}>Give New Reference</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.navigate('/screens/give_reference')}>
+              <TouchableOpacity onPress={() => router.navigate('(tabs)/explore')}>
                 <Text style={styles.dropdownItem}>Give Reference</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.navigate('/screens/Received_reference')} >
@@ -234,7 +226,7 @@ const HomePage: React.FC = () => {
             <Text style={styles.sidebarItem}>Components</Text>
           </TouchableOpacity>
           <TouchableOpacity >
-                      <Text style={styles.sidebarItem}>Help</Text>
+            <Text style={styles.sidebarItem}>Help</Text>
           </TouchableOpacity>
         </ScrollView>
       </Animated.View>
@@ -244,11 +236,12 @@ const HomePage: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    position:'relative',
-    top:25,
+    position: 'relative',
+    top: 30,
     flex: 1,
   },
   header: {
+    height: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -262,12 +255,14 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     display: 'flex',
+    justifyContent: 'center',
     alignContent: 'center',
-    height: 40,
   },
   profileImage: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
+    padding: 10,
+    borderRadius: 50
   },
   content: {
     justifyContent: 'center',
@@ -330,9 +325,12 @@ const styles = StyleSheet.create({
   container2: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    padding: 16,
+    paddingHorizontal: 10,
+    marginBottom: 30,
   },
   header2: {
+    width: 400,
+    overflow: 'scroll',
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

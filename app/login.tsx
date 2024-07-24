@@ -1,43 +1,61 @@
 import * as React from "react";
+import 'nativewind';
 import { Image } from "expo-image";
-import { Text, View, Pressable, StyleSheet, TextInput} from "react-native";
+import { Text, View, Pressable, StyleSheet, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import { isLoaded } from "expo-font";
 
 const Login = () => {
-  const router = useRouter();
 
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [data, setData] = useState([]);
+  const [EyeClose, setEyeClose] = useState(false);
+  const [Message, setMessage] = useState('');
+  const [isLogged, setisLogged] = useState(false);
 
+  const handleLogin = async () => {
 
-const handleLogin = async () => {
-    router.navigate('/(tabs)/home');
-  //   const res = await fetch('https://bbmoapp.bbnglobal.net/api/users/login',{
-  //     method: 'POST',
-  //     headers: {
-  //       Authorization: 'Basic YW1hckBzYW5taXNoYS5jb206YW1hcjEyM0A=',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       "Username": username,
-  //       "Password": password
-  //     }),
-  //  })
-  
-    // const data = await res.json();
-    // setData(data);
+    if (username !== '' && password !== '') {
+      const myHeaders = new Headers();
+      myHeaders.append("Accept", "application/json");
+      const authString = btoa(`${username}:${password}`);
+      console.log(authString);
+      myHeaders.append("Authorization", `Basic ${authString}`);
 
-    // if (data.message === "success") {
-    //   alert(`Login Successful ${data.member.Member.name}`);
-    // router.navigate('/(tabs)/home');
-    // }else{
-    //   alert(`Login Unsuccessful`);
-    // }
+      console.log(authString);
 
-    
-   }
+      const res = await fetch('https://bbmoapp.bbnglobal.net/api/users/login', {
+        method: 'POST',
+        headers: myHeaders,
+      });
+
+      if (res.status === 200) {
+        const data = await res.json();
+        const name = data.member.Member.name;
+        if (name === data.member.Member.name) {
+          setTimeout(() => {
+            setisLogged(true);
+            setMessage(data.member.Member.name);
+          }, 2500);
+          router.navigate('/(tabs)/home');
+        } else {
+          setisLogged(false);
+          alert('Login Unsuccessful');
+        }
+      } else {
+        setTimeout(() => {
+          alert(`Login Unsuccessful`);
+        }, 2500);
+      }
+    } else {
+      setTimeout(() => {
+        alert('Please Fill the fields');
+      }, 2000);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -50,6 +68,13 @@ const handleLogin = async () => {
       <Text style={styles.subtitleText}>
         Sign in to access your account
       </Text>
+      {
+        isLogged ? (
+          <View className="w-[250px] h-10 bg-green-200 my-2 rounded-md">
+            <Text>{Message}</Text>
+          </View>
+        ) : []
+      }
       <View style={styles.inputContainer}>
         <Image
           contentFit="cover"
@@ -63,6 +88,7 @@ const handleLogin = async () => {
             setUsername(e);
           }}
           style={styles.input}
+
         />
       </View>
       <View style={styles.inputContainer}>
@@ -73,15 +99,22 @@ const handleLogin = async () => {
         />
         <TextInput
           placeholder="Enter your password"
-          secureTextEntry
+          secureTextEntry={EyeClose ? false : true}
           value={password}
-          onChangeText={(e) =>{
+          onChangeText={(e) => {
             setPassword(e)
           }}
           style={styles.input}
         />
+        {
+          EyeClose ? (
+            <FontAwesome name="eye" size={15} color='gray' onPress={() => { setEyeClose(!EyeClose) }} />
+          ) : (
+            <FontAwesome name="eye-slash" size={15} color='gray' onPress={() => { setEyeClose(!EyeClose) }} />
+          )
+        }
       </View>
- 
+
       <Pressable
         style={styles.button}
         onPress={handleLogin}
@@ -89,7 +122,7 @@ const handleLogin = async () => {
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
       <Text style={styles.forgetPasswordText} onPress={() => router.navigate('/Forget_password')}>
-      Forget password?
+        Forget password?
       </Text>
       <Text style={styles.registerText}>
         New Member? <Text style={styles.link} onPress={() => router.navigate('/Register')}>Register</Text>
@@ -122,14 +155,14 @@ const styles = StyleSheet.create({
   subtitleText: {
     fontSize: 16,
     color: '#666',
-    marginBottom: 30,
+    marginBottom: 15,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
     width: '100%',
-    backgroundColor:'#DCDCDC',
+    backgroundColor: '#DCDCDC',
     borderRadius: 10,
     paddingHorizontal: 10,
   },

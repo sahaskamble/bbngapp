@@ -1,5 +1,6 @@
 import { View } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
+import 'nativewind';
 
 export default function AnimatedNavOne({ focused, name }: any) {
 
@@ -42,7 +43,7 @@ export default function AnimatedNavOne({ focused, name }: any) {
 
   return (
     <View
-      style={focused ? Focused : UnFocused[0]}>
+      style={focused ? Focused : UnFocused[0]} className="">
       <FontAwesome name={name} color={ focused ? Focused[1].fgcolor : UnFocused[1].fgcolor} size={30} style={{ marginBottom: 5 }} />
     </View>
   );

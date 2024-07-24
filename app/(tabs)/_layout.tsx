@@ -34,7 +34,7 @@ export default function TabLayout() {
         options={{
           title: 'Explore',
           tabBarIcon: ({ focused }) => (
-            <AnimatedNavOne name="code" focused={ focused } />
+            <AnimatedNavOne name="bell-o" focused={ focused } />
           ),
         }}
       />
