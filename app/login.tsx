@@ -16,6 +16,7 @@ const Login = () => {
   const [Message, setMessage] = useState('');
   const [isLogged, setisLogged] = useState(false);
   const [userData, setUserData] = useState<Array>([]);
+  const [isLoggedIn, setisLoggedIn] = useState(false);
 
   const handleLogin = async () => {
 
@@ -42,8 +43,8 @@ const Login = () => {
             setisLogged(true);
             setMessage(data.member.Member.name);
           }, 2500);
-          AsyncStorage.setItem('username',username);
-          AsyncStorage.setItem('password',password);
+          AsyncStorage.setItem('username', username);
+          AsyncStorage.setItem('password', password);
           setUserData(memberData); // Save user data
           await AsyncStorage.setItem('userData', JSON.stringify(memberData)); // Store user data
           router.navigate('/(tabs)/home');
