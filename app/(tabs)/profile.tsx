@@ -1,192 +1,87 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Animated, Easing, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import * as React from "react";
+import { Text, View, ScrollView, TouchableOpacity, Alert, Image } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import 'nativewind';
+import { FontAwesome } from "@expo/vector-icons";
+import AnimatedNavbar from "@/components/AnimatedNavbar";
 
-// Define a type for the user state
-interface User {
-  username: string;
-  email: string;
-  followers: number;
-  profileImage: string;
-  isFollowing: boolean;
-  bio: string;
-}
 
-interface Post {
+interface Member {
   id: string;
-  image: string;
+  name: string;
+  profile_pic: string | null;
+  organization_name: string;
+  business_tagline: string;
+  organization_description: string;
 }
 
-const ProfilePage: React.FC = () => {
-  const [user, setUser] = useState<User>({
-    username: 'Yash Mhatre',
-    email: 'ymhatre625@gmail.com',
-    followers: 1000,
-    profileImage: 'https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/10/The-Eminence-in-Shadow-trailer.jpg',
-    isFollowing: false,
-    bio: 'Travel enthusiast | Photographer | Food lover',
-  });
+const Profile: React.FC = () => {
+  const [userData, setUserData] = React.useState<Member | null>(null);
+  const router = useRouter();
 
-  const [posts, setPosts] = useState<Post[]>([
-    // Dummy data for posts
-    { id: '1', image: 'https://via.placeholder.com/150' },
-    { id: '2', image: 'https://via.placeholder.com/150' },
-    { id: '3', image: 'https://via.placeholder.com/150' },
-    // Add more post data as needed
-  ]);
-
-  const profileImageScale = useRef(new Animated.Value(0)).current;
-  const followButtonColor = useRef(new Animated.Value(0)).current;
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    Animated.timing(profileImageScale, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-      easing: Easing.bounce,
-    }).start();
+  React.useEffect(() => {
+    loadUserData();
   }, []);
 
-  const handleFollowToggle = () => {
-    setUser(prevState => {
-      const isFollowing = !prevState.isFollowing;
-
-      Animated.timing(followButtonColor, {
-        toValue: isFollowing ? 1 : 0,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-
-      return {
-        ...prevState,
-        isFollowing,
-        followers: isFollowing ? prevState.followers + 1 : prevState.followers - 1,
-      };
-    });
+  const loadUserData = async () => {
+    try {
+      const storedUserData = await AsyncStorage.getItem('userData');
+      if (storedUserData !== null) {
+        const parsedUserData: Member = JSON.parse(storedUserData);
+        setUserData(parsedUserData);
+      }
+    } catch (error) {
+      console.error('Failed to load user data', error);
+    }
   };
 
-  const handleEditProfile = () => {
-    navigation.navigate('EditProfile' as never);
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.clear();
+      Alert.alert('Logged Out', 'You have been successfully logged out.');
+      router.navigate('/login');
+    } catch (error) {
+      console.error('Failed to clear AsyncStorage', error);
+    }
   };
 
-  const interpolatedButtonColor = followButtonColor.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['#007bff', '#6c757d'],
-  });
-
-  const renderPost = ({ item }: { item: Post }) => (
-    <Image style={styles.postImage} source={{ uri: item.image }} />
-  );
+  if (!userData) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-200">
+        <Text className="text-xl text-gray-500">Loading...</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.profileHeader}>
-        <Animated.Image
-          style={[styles.profileImage, { transform: [{ scale: profileImageScale }] }]}
-          source={{ uri: user.profileImage }}
-        />
-        <View style={styles.profileDetails}>
-          <Text style={styles.username}>{user.username}</Text>
-          <Text style={styles.followers}>{user.followers} Followers</Text>
-          <Text style={styles.bio}>{user.bio}</Text>
-          <TouchableOpacity
-            style={[styles.followButton,]}
-            onPress={handleFollowToggle}
-          >
-            <Text style={styles.buttonText}>{user.isFollowing ? 'Following' : 'Follow'}</Text>
+    <>
+      <View className="flex-1 relative top-[30px] bg-gray-200">
+        <AnimatedNavbar />
+        <View className="flex-1 justify-evenly">
+          <View className="flex items-center">
+            {userData.profile_pic ? (
+              <Image
+                style={{ width: 80, height: 80 }}
+                source={{ uri: userData.profile_pic }}
+              />
+            ) : (
+              <FontAwesome name="user-o" size={50} className="border-red-600 border-2" />
+            )}
+            <Text className="text-3xl font-bold">{userData.name}</Text>
+          </View>
+          <View className="flex gap-6 items-center h-1/2">
+            <Text className="text-xl italic">&quot;{` ${userData.business_tagline} `}&quot;</Text>
+            <Text className="text-xl font-semibold">{userData.organization_name}</Text>
+            <Text className="text-lg p-4 text-center">{userData.organization_description}</Text>
+          </View>
+          <TouchableOpacity onPress={handleLogout} className="w-[90%] mx-auto mb-10 px-4 p-2 bg-[#5bc0de] rounded-lg inline-flex items-center">
+            <Text className="text-xl">Logout</Text>
           </TouchableOpacity>
         </View>
       </View>
-
-      <View style={styles.editProfileSection}>
-        <TouchableOpacity style={styles.editProfileButton} onPress={handleEditProfile}>
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
-      </View>
-
-      <FlatList
-        data={posts}
-        renderItem={renderPost}
-        keyExtractor={item => item.id}
-        numColumns={3}
-        style={styles.postsGrid}
-      />
-    </View>
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position:'relative',
-    top:25,
-    backgroundColor: '#f5f5f5',
-  },
-  profileHeader: {
-    flexDirection: 'row',
-    padding: 20,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-  },
-  profileDetails: {
-    marginLeft: 20,
-    flex: 1,
-    top:29,
-  },
-  username: {
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  followers: {
-    fontSize: 16,
-    color: '#888',
-  },
-  bio: {
-    fontSize: 14,
-    color: '#555',
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  followButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  editProfileSection: {
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  editProfileButton: {
-    backgroundColor: '#28a745',
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  postsGrid: {
-    flex: 1,
-  },
-  postImage: {
-    width: '33%',
-    height: 150,
-    margin: 1,
-  },
-});
-
-export default ProfilePage;
+export default Profile;

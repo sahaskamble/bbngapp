@@ -5,7 +5,7 @@ import { Text, View, Pressable, StyleSheet, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { isLoaded } from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
 
@@ -15,6 +15,7 @@ const Login = () => {
   const [EyeClose, setEyeClose] = useState(false);
   const [Message, setMessage] = useState('');
   const [isLogged, setisLogged] = useState(false);
+  const [userData, setUserData] = useState<Array>([]);
 
   const handleLogin = async () => {
 
@@ -22,7 +23,7 @@ const Login = () => {
       const myHeaders = new Headers();
       myHeaders.append("Accept", "application/json");
       const authString = btoa(`${username}:${password}`);
-      console.log(authString);
+      // console.log(authString);
       myHeaders.append("Authorization", `Basic ${authString}`);
 
       console.log(authString);
@@ -34,12 +35,17 @@ const Login = () => {
 
       if (res.status === 200) {
         const data = await res.json();
+        const memberData = data.member.Member;
         const name = data.member.Member.name;
         if (name === data.member.Member.name) {
           setTimeout(() => {
             setisLogged(true);
             setMessage(data.member.Member.name);
           }, 2500);
+          AsyncStorage.setItem('username',username);
+          AsyncStorage.setItem('password',password);
+          setUserData(memberData); // Save user data
+          await AsyncStorage.setItem('userData', JSON.stringify(memberData)); // Store user data
           router.navigate('/(tabs)/home');
         } else {
           setisLogged(false);

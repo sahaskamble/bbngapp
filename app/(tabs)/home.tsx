@@ -1,70 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView, Animated, Easing, Linking } from 'react-native';
-import { useRouter } from 'expo-router';
-import { EvilIcons } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import AnimatedNavbar from '@/components/AnimatedNavbar';
 
 const HomePage: React.FC = () => {
-  const router = useRouter();
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [showMessagesDropdown, setShowMessagesDropdown] = useState(false);
-  const [showAuthDropdown, setShowAuthDropdown] = useState(false);
-
-  const sidebarAnim = useRef(new Animated.Value(-1000)).current;
-
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar),
-      Animated.timing(sidebarAnim, {
-        toValue: showSidebar ? -1000 : 0,
-        duration: 300,
-        easing: Easing.ease,
-        useNativeDriver: false,
-      }).start();
-  };
-
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
-
-  const toggleMessagesDropdown = () => {
-    setShowMessagesDropdown(!showMessagesDropdown);
-  };
-
-  const toggleAuthDropdown = () => {
-    setShowAuthDropdown(!showAuthDropdown);
-  };
-
-
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={toggleSidebar} style={styles.iconButton}>
-          <EvilIcons name="navicon" size={50} color="#ffffff" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() =>{ router.navigate('(tabs)/profile') } }>
-          <Image
-            style={styles.profileImage}
-            source={require('../../assets/images/profile.jpg')}
-          />
-        </TouchableOpacity>
-      </View>
+      <AnimatedNavbar />
       <ScrollView style={styles.container2}>
+        {/*
         <View style={styles.header2}>
-          <View style={styles.headerLeft}>
-            <TouchableOpacity style={styles.menuButton}>
-              <Text style={styles.menuButtonText}>☰</Text>
-            </TouchableOpacity>
-            <View style={styles.picker}>
-              <Text style={styles.pickerText}>Category Search</Text>
-            </View>
-            <View style={styles.picker}>
-              <Text style={styles.pickerText}>Chapter Search</Text>
-            </View>
-            <TextInput
-              style={styles.input}
-              placeholder="Search by Keywords"
-            />
-          </View>
           <View style={styles.headerRight}>
             <TouchableOpacity style={styles.notificationButton}>
               <Text style={styles.notificationBadge}>23</Text>
@@ -75,6 +19,7 @@ const HomePage: React.FC = () => {
             </View>
           </View>
         </View>
+        */}
 
         <View style={styles.imageContainer}>
           <Image
@@ -153,83 +98,6 @@ const HomePage: React.FC = () => {
           <Text style={styles.sectionTitle}>Messages</Text>
         </View>
       </ScrollView>
-      <Animated.View style={[styles.sidebar, { left: sidebarAnim, backgroundColor: '#5bc0de' }]}>
-        <TouchableOpacity onPress={toggleSidebar} style={styles.closeButton}>
-          <EvilIcons name="close" size={40} color="#ffffff" />
-        </TouchableOpacity>
-        <Image
-          style={styles.sidebarImage}
-          source={require('../../assets/images/logo.png')}
-        />
-        <ScrollView>
-          <TouchableOpacity onPress={() => router.navigate('(tabs)/home')}>
-            <Text style={styles.sidebarItem}>Dashboard</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownToggle}>
-            <Text style={styles.sidebarItem}>References</Text>
-            <EvilIcons name={showDropdown ? "chevron-up" : "chevron-down"} size={24} color="#000" />
-          </TouchableOpacity>
-          {showDropdown && (
-            <View style={styles.dropdown}>
-              <TouchableOpacity onPress={() => router.navigate('/screens/givenewreference')}>
-                <Text style={styles.dropdownItem}>Give New Reference</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.navigate('(tabs)/explore')}>
-                <Text style={styles.dropdownItem}>Give Reference</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.navigate('/screens/Received_reference')} >
-                <Text style={styles.dropdownItem}>Received Reference</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          <TouchableOpacity >
-            <Text style={styles.sidebarItem}>Member Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleMessagesDropdown} style={styles.dropdownToggle}>
-            <Text style={styles.sidebarItem}>Messages</Text>
-            <EvilIcons name={showMessagesDropdown ? "chevron-up" : "chevron-down"} size={24} color="#000" />
-          </TouchableOpacity>
-          {showMessagesDropdown && (
-            <View style={styles.dropdown}>
-              <TouchableOpacity >
-                <Text style={styles.dropdownItem}>Message 1</Text>
-              </TouchableOpacity>
-              <TouchableOpacity >
-                <Text style={styles.dropdownItem}>Message 2</Text>
-              </TouchableOpacity>
-              <TouchableOpacity >
-                <Text style={styles.dropdownItem}>Message 3</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          <TouchableOpacity onPress={toggleAuthDropdown} style={styles.dropdownToggle}>
-            <Text style={styles.sidebarItem}>Authentication</Text>
-            <EvilIcons name={showAuthDropdown ? "chevron-up" : "chevron-down"} size={24} color="#000" />
-          </TouchableOpacity>
-          {showAuthDropdown && (
-            <View style={styles.dropdown}>
-              <TouchableOpacity >
-                <Text style={styles.dropdownItem}>Authentication 1</Text>
-              </TouchableOpacity>
-              <TouchableOpacity >
-                <Text style={styles.dropdownItem}>Authentication 2</Text>
-              </TouchableOpacity>
-              <TouchableOpacity >
-                <Text style={styles.dropdownItem}>Authentication 3</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          <TouchableOpacity >
-            <Text style={styles.sidebarItem}>Receipt</Text>
-          </TouchableOpacity>
-          <TouchableOpacity >
-            <Text style={styles.sidebarItem}>Components</Text>
-          </TouchableOpacity>
-          <TouchableOpacity >
-            <Text style={styles.sidebarItem}>Help</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </Animated.View>
     </View>
   );
 };
@@ -274,53 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 20,
-  },
-  sidebar: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    zIndex: 100,
-    width: '80%',
-    backgroundColor: '#5bc0de',
-    padding: 20,
-    display: 'flex',
-    alignContent: 'center',
-    justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-  },
-  closeButton: {
-    alignSelf: 'flex-end',
-    marginBottom: 10,
-  },
-  sidebarItem: {
-    fontSize: 18,
-    marginBottom: 10,
-    padding: 10,
-  },
-  sidebarImage: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  dropdownToggle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontSize: 18,
-    color: '#1a73e8',
-  },
-  dropdown: {
-    marginVertical: 10,
-    paddingLeft: 20,
-  },
-  dropdownItem: {
-    fontSize: 16,
-    paddingVertical: 5,
   },
   container2: {
     flex: 1,

@@ -1,40 +1,57 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import AnimatedNav from '@/components/navigation/NavbarAnimated';
-import AnimatedNavOne from '@/components/navigation/NavAniOne';
-import AnimatedNavTwo from '@/components/navigation/NavAniTwo';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#000',
         headerShown: false,
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
         tabBarStyle:{
           backgroundColor: "#5bc0de",
-          height: 60,
-        }
+          height: 65,
+          paddingBottom: 5,
+          marginVertical: 10,
+          marginHorizontal: 15,
+          borderRadius: 25,
+        },
       }}>
       <Tabs.Screen
         name="home"
         options={{
           title: 'Home',
           tabBarIcon: ({ focused }) => (
-            <AnimatedNav name="home" focused={ focused } />
+            <AnimatedNav name="home" focused={ focused } size={35} />
           ),
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
+          title: 'References',
           tabBarIcon: ({ focused }) => (
-            <AnimatedNavOne name="bell-o" focused={ focused } />
+            <AnimatedNav name="bell" focused={ focused } size={32} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="givenewreference"
+        options={{
+          title: 'Give new reference',
+          tabBarIcon: ({ focused }) => (
+            <AnimatedNav name="plus-square" focused={ focused } size={30} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Received_reference"
+        options={{
+          title: 'Recived reference',
+          tabBarIcon: ({ focused }) => (
+            <AnimatedNav name="file-text" focused={ focused } size={30} />
           ),
         }}
       />
@@ -43,7 +60,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ focused }) => (
-            <AnimatedNavTwo name="account" focused={ focused } />
+            <AnimatedNav name="user" focused={ focused } size={33} />
           ),
         }}
       />
